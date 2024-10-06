@@ -17,12 +17,11 @@ import { CreateProduct } from "../Modals/CreateProducts";
 import { SearchIcon } from "../icons";
 
 import { useProducts } from "@/hooks/products/useProducts";
-import { useCategories } from "@/hooks/categories/useCategories";
 
 export const Products = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+  const [selectedCategory] = useState<number | null>(null);
   const [searchTitle, setSearchTitle] = useState<string>("");
 
   const {
@@ -33,17 +32,15 @@ export const Products = () => {
     page,
     limit: rowsPerPage,
     categoryId: selectedCategory || undefined,
-    title: searchTitle, // Agregar filtro por título
+    title: searchTitle,
   });
-
-  const { categories, categoriesLoading, error } = useCategories();
 
   useEffect(() => {
     updateFilters({
       page,
       limit: rowsPerPage,
       categoryId: selectedCategory || undefined,
-      title: searchTitle, // Actualizar el filtro de búsqueda por título
+      title: searchTitle,
     });
   }, [page, rowsPerPage, selectedCategory, searchTitle]);
 
@@ -55,7 +52,7 @@ export const Products = () => {
   };
 
   const handleTitleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTitle(e.target.value); // Actualizar el estado de búsqueda por título
+    setSearchTitle(e.target.value);
   };
 
   const topContent = (
@@ -65,11 +62,12 @@ export const Products = () => {
       </div>
       <div className="flex justify-between items-center">
         <label className="flex items-center text-default-400 text-small">
-          Rows per page:
+          Cantidad de Filas:
           <select
             className="bg-transparent outline-none text-default-400 text-small"
             onChange={onRowsPerPageChange}
           >
+            <option value="All" />
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="15">15</option>
@@ -80,7 +78,7 @@ export const Products = () => {
         </label>
 
         <Input
-        className="max-w-[200px]"
+          className="max-w-[200px]"
           endContent={
             <SearchIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
           }
@@ -95,8 +93,10 @@ export const Products = () => {
 
   return (
     <Table
+      isHeaderSticky
       isStriped
-      aria-label="Tabla de productos con paginación asíncrona"
+      aria-label="Tabla de productos "
+      className="max-h-[650px]"
       topContent={topContent}
     >
       <TableHeader>
@@ -106,8 +106,8 @@ export const Products = () => {
         <TableColumn key="images">Image</TableColumn>
       </TableHeader>
       <TableBody
-        emptyContent={"No rows to display."}
-        items={products ?? []}
+        emptyContent={loading ? "Cargando..." : "No se encontraron registros."}
+        items={products && products.length > 0 ? products : []}
         loadingContent={"Loading..."}
         loadingState={loadingState}
       >
@@ -115,21 +115,9 @@ export const Products = () => {
           <TableRow key={product?.id}>
             {(columnKey) => (
               <TableCell>
-                {columnKey === "category" ? (
-                  product.category?.name
-                ) : columnKey === "images" ? (
-                  product.images.length > 0 ? (
-                    <img
-                      alt={product.title}
-                      src={JSON.parse(product.images[0])[0]}
-                      style={{ width: "50px", height: "50px" }}
-                    />
-                  ) : (
-                    "No image available"
-                  )
-                ) : (
-                  getKeyValue(product, columnKey)
-                )}
+                {columnKey === "category"
+                  ? product.category?.name
+                  : getKeyValue(product, columnKey)}
               </TableCell>
             )}
           </TableRow>

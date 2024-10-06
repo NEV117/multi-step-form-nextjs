@@ -11,17 +11,11 @@ import {
 import { useState } from "react";
 
 import { PlusIcon } from "../icons";
-import { Form } from "../Forms/GenericForm";
 import { Confirmation } from "../Forms/Confirmation";
+import { MultiSelectForm } from "../Forms/MultiSelectForm";
 
 import { useCategories } from "@/hooks/categories/useCategories";
-
-type Field = {
-  label: string;
-  type: string;
-  placeholder?: string;
-  options?: { id: number; name: string }[];
-};
+import { AllFields, Field } from "@/types";
 
 type FieldsForSteps = {
   [key: number]: Field[];
@@ -51,6 +45,8 @@ export const CreateProduct = () => {
     ],
   };
 
+  const allFields: AllFields = fieldsForSteps;
+
   const nextStep = () => {
     setCurrentStep((prev) => {
       const newStep = Math.min(prev + 1, 3);
@@ -70,7 +66,7 @@ export const CreateProduct = () => {
   return (
     <>
       <Button color="primary" endContent={<PlusIcon />} onPress={onOpen}>
-        Add New
+        Producto
       </Button>
       <Modal
         isOpen={isOpen}
@@ -128,19 +124,21 @@ export const CreateProduct = () => {
               </ModalHeader>
               <ModalBody className="flex justify-center items-center ">
                 {currentStep < 3 ? (
-                  <Form
+                  <MultiSelectForm
                     fields={fieldsForSteps[currentStep]}
-                    step={currentStep}
                     nextStep={nextStep}
                     previousStep={previousStep}
+                    step={currentStep}
+                    navigation={true}
                   />
                 ) : (
                   <Confirmation
-                    step={currentStep}
-                    setStep={setCurrentStep}
+                    close={onClose}
+                    fields={allFields}
                     nextStep={nextStep}
                     previousStep={previousStep}
-                    close={onClose}
+                    setStep={setCurrentStep}
+                    step={currentStep}
                   />
                 )}
               </ModalBody>

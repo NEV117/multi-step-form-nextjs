@@ -11,7 +11,7 @@ interface Filters {
   priceMax?: number;
   categoryId?: number;
   page?: number;
-  limit?: number ;
+  limit?: number;
 }
 
 export const useProducts = (initialFilters: Filters = {}) => {
@@ -19,7 +19,7 @@ export const useProducts = (initialFilters: Filters = {}) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState<Filters>(initialFilters);
-  const [totalPages, setTotalPages] = useState<number>(1);
+  const [totalPages] = useState<number>(1);
 
   const fetchProducts = async (filters: Filters) => {
     setLoading(true);
@@ -39,16 +39,18 @@ export const useProducts = (initialFilters: Filters = {}) => {
       if (filters.limit) queryParams.append("limit", filters.limit.toString());
 
       const response = await fetch(
-        `${env.HOSTNAME}/products/?${queryParams.toString()}`,
+        `${env.HOSTNAME}/products/?${queryParams.toString()}`
       );
 
       if (!response.ok) throw new Error("Error fetching products");
 
       const data = await response.json();
 
-      console.log("Datos recibidos:", response);
+      const sortedProducts = data.sort((a: Product, b: Product) => {
+        return new Date(b.creationAt).getTime() - new Date(a.creationAt).getTime();
+      });
 
-      setProducts(data || []);
+      setProducts(sortedProducts || []);
     } catch (err) {
       setError((err as Error).message);
     } finally {

@@ -1,12 +1,14 @@
 # MultiStep Form en NEXT14
 
-hecho por: Nicolas Escandon Varela
+Hecho por: Nicolas Escandon Varela
 
-He usando una plantilla de Next.js 14 (app directory) and NextUI (v2) para facilitar algunas configuraciones y estilos
+Me he basado en una plantilla de Next.js 14 (app directory) and NextUI (v2) para facilitar algunas configuraciones y estilos para el proyecto.
 
-No Alcance a hacer la funcionalidad de editar o devolverce en el formulario, tambien me gustaria mejorar un poco las interfaces y tipos de cada componente
+La aplicación interactúa con la `FakeAPI de Platzi` para obtener las categorías de los productos y enviar los datos de los nuevos productos a la API. Por lo Tanto no he incluido el `.env` en el `.gitignore` 
 
-## Technologies Used
+ Implementé la persistencia de datos usando localStorage y una React Context API, así que no perderán su progreso si recargan la página. (de hecho solo se borran desde la herramientas de navegador)
+
+## Technologias Utilizadas
 
 - [Next.js 14](https://nextjs.org/docs/getting-started)
 - [NextUI v2](https://nextui.org/)
@@ -26,7 +28,7 @@ git clone https://github.com/NEV117/multi-step-form-nextjs.git
 
 ### Instalar dependecias
 
-You can use one of them `npm`, `yarn`, `pnpm`, `bun`, Example using `npm`:
+Puedes usar cualquiera de estas `npm`, `yarn`, `pnpm`, `bun`, Ejemplo usando `npm`:
 
 ```bash
 npm install
@@ -38,12 +40,22 @@ npm install
 npm run dev
 ```
 
-### Setup pnpm (optional)
+## Preview
 
-If you are using `pnpm`, you need to add the following code to your `.npmrc` file:
+Formulario:
 
-```bash
-public-hoist-pattern[]=*@nextui-org/*
-```
+<p align="center">
+  <img src="readmeImages/Form.JPG" alt="ascii-donut.gif">
+</p>
 
-After modifying the `.npmrc` file, you need to run `pnpm install` again to ensure that the dependencies are installed correctly.
+
+Tabla (Filtra por `Nombre` del producto):
+<p align="center">
+  <img src="readmeImages/FiltroPorNombre.JPG" alt="ascii-donut.gif">
+</p>
+
+
+Valida que los campos no sean nulos:
+<p align="center">
+  <img src="readmeImages/Validations.JPG" alt="ascii-donut.gif">
+</p>

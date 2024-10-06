@@ -1,9 +1,6 @@
 /* eslint-disable padding-line-between-statements */
-/* eslint-disable prettier/prettier */ 
-import {
-  Select,
-  SelectItem,
-} from "@nextui-org/select";
+/* eslint-disable prettier/prettier */
+import { Select, SelectItem } from "@nextui-org/select";
 import { Input, Textarea } from "@nextui-org/input";
 import { useState, useEffect } from "react";
 import { ModalFooter, useDisclosure } from "@nextui-org/modal";
@@ -29,18 +26,20 @@ interface FormProps {
   step: number;
   nextStep: (data: any) => void;
   previousStep: (data: any) => void;
+  navigation: boolean;
 }
 
-export const Form: React.FC<FormProps> = ({
+export const MultiSelectForm: React.FC<FormProps> = ({
   fields,
   step,
   nextStep,
   previousStep,
+  navigation,
 }) => {
   const { formData, updateFormData } = useForm();
   const [selectedDropdown, setSelectedDropdown] = useState<string[]>([]);
-  const [isValid, setIsValid] = useState(true); 
-  const {  onClose,  } = useDisclosure();
+  const [isValid, setIsValid] = useState(true);
+  const { onClose } = useDisclosure();
 
   useEffect(() => {
     const storedFormData = localStorage.getItem("formData");
@@ -71,9 +70,9 @@ export const Form: React.FC<FormProps> = ({
     fields.forEach((field) => {
       const fieldValue = formData[field.label] || "";
       if (field.type !== "select") {
-        if (!fieldValue) valid = false; 
+        if (!fieldValue) valid = false;
       } else if (field.type === "select" && selectedDropdown.length === 0) {
-        valid = false; 
+        valid = false;
       }
     });
     setIsValid(valid);
@@ -82,7 +81,7 @@ export const Form: React.FC<FormProps> = ({
 
   const handleValidate = () => {
     if (validateFields()) {
-      nextStep(formData); 
+      nextStep(formData);
     }
   };
 
@@ -157,22 +156,24 @@ export const Form: React.FC<FormProps> = ({
             return null;
         }
       })}
-      <ModalFooter className="pt-2 pb-4">
-        {step > 1 && (
-          <Button color="primary" variant="bordered" onPress={previousStep}>
-            Previous
-          </Button>
-        )}
-        {step < 3 ? (
-          <Button color="primary" onPress={handleValidate}>
-            Next
-          </Button>
-        ) : (
-          <Button color="primary" onPress={onClose}>
-            Submit
-          </Button>
-        )}
-      </ModalFooter>
+      {navigation && ( 
+        <ModalFooter className="pt-2 pb-4">
+          {step > 1 && (
+            <Button color="primary" variant="bordered" onPress={previousStep}>
+              Atrás
+            </Button>
+          )}
+          {step < 3 ? (
+            <Button color="primary" onPress={handleValidate}>
+              Siguiente
+            </Button>
+          ) : (
+            <Button color="primary" onPress={onClose}>
+              Enviar
+            </Button>
+          )}
+        </ModalFooter>
+      )}
     </form>
   );
 };
