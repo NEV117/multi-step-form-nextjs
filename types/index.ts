@@ -1,0 +1,19 @@
+import { SVGProps } from "react";
+
+export type IconSvgProps = SVGProps<SVGSVGElement> & {
+  size?: number;
+};
+
+export interface ProductCategory  {
+  id: number;
+  name: string;
+  image: string;
+}
+export interface Product {
+  id: number;
+  title: string;
+  price: number;
+  description: string;
+  category: ProductCategory;
+  images: string[];
+}
